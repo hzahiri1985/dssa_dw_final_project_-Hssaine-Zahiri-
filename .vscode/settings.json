@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 1985,
+            "driver": "PostgreSQL",
+            "name": "dvd",
+            "database": "dvdrental",
+            "username": "postgres",
+            "password": "Tanila2019"
+        }
+    ]
+}
