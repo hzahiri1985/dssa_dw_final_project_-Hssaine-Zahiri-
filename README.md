@@ -49,7 +49,24 @@ load the data into the new schema in dabase (Data Warehouse)
 + Load the DataFrame into new schema.
 
 
+# Code
 
+## Using virtualenv to create your virtual environment
+
+pip install virtualenv
+pip install virtualenv
+Create your virtual enviroment
+python -m virtualenv .venv --python=3.10
+Access Virtual Environment MacOS or Linux
+source .venv/bin/activate 
+Access Virtual Environment Windows cmd
+.venv\Scripts\activate
+Deactivate Virtual Environment
+exit
+Clean up or Remove a Virtual Environment
+.venv --rm
+
+![image](https://user-images.githubusercontent.com/49703976/205454061-98f07ed3-cf5f-4203-872e-4321e7eb0308.png)
 
 
 
