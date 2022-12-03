@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env":{"host":"localhost",
+            "dbname":"dvdrental",
+            "user":"postgres",
+            "port":"1985",
+            "password":"Tanila2019",
+            "dbtype":"postgresql+psycopg2"}
+            
+
+
+        }
+    ]
+}

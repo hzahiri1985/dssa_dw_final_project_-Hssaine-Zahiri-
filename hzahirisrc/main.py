@@ -1,9 +1,8 @@
-# this script is to demonstrate ETL workflow
+# By Hssaine Zahiri 
+# This script is to demonstrate ETL workflow
 #ETL is a process that extracts, transforms, and loads data from multiple sources to a data warehouse or other unified data repository.
-
-
-
-
+# Import all the libraries we need for this project 
+import os
 import pandas as pd
 import psycopg2
 import numpy as np
@@ -13,38 +12,45 @@ from sqlalchemy import create_engine
 import pyarrow.parquet as pq
 import pyarrow as pa
 import pandas.io.sql as psql
-
-
-#Creating an engine
-
-
+from decouple import config
 
 #*********************************************************************#
 #*************************PARAMETERS**********************************#
 #*********************************************************************#
-# connecting python to SQLusing pyodbc
-hostname = 'localhost'
-database = 'dvdrental'
-username = 'postgres'
-pwd = 'Tanila2019'
-port_id = 1985
-# make connection
-conn = psycopg2.connect(host= hostname,
-                        dbname = database,
-                        user = username,
-                        password = pwd,
-                        port = port_id)
 
+#Use of os.environ to get access of environment variables
+#Create environment variables & store them in the launch.json file
+#Insert environment variables by adding "env" to the configuration json
+#Note storing environment variables will require you to run scripts in debugger mode only.
+
+host=os.environ["host"]
+dbname=os.environ["dbname"]
+user=os.environ["user"]
+port=os.environ["port"]
+password=os.environ["password"]
+dbtype = "postgresql+psycopg2"
+
+#Creating an engine
+
+engine = f"{dbtype}://{user}:{password}@{host}:{port}/{dbname}"
+
+# connecting python to SQLusing pyodbc
+from config import config
+# read connection parameters
+params = config()
+# connect to postgresql server
+conn = psycopg2.connect(**params)
 # open a cursor to perform database operations
 cursor = conn.cursor()
-
 # create DSSA schema if doesn't exist
+
 cursor.execute('''
 	      create schema IF NOT EXISTS dssa;''')
 
 #********************************************************************#
 #*************************CREATING TABLES****************************#
 #********************************************************************#
+
 # create FACT_RENTAL table
 cursor.execute('''
 		create table if not exists dssa.FACT_RENTAL (
@@ -107,6 +113,9 @@ conn.commit()
 #******************************************************************#
 #**********************Build STAR SCHEMA***************************#
 #******************************************************************#
+
+# I used SQl script to extract the data and do the transfomation needed.
+
 # Fact Table: FACT_RENTAL
 SQL_FACT_Rental= pd.read_sql_query('''
                               SELECT c.customer_id AS sk_customer,
@@ -125,7 +134,6 @@ SQL_FACT_Rental= pd.read_sql_query('''
                               
 df_FACT_Rental = pd.DataFrame(SQL_FACT_Rental, columns = ['sk_customer', 'sk_date','sk_store', 'sk_film','sk_staff','count_rentals'])
 print(df_FACT_Rental)
-
 
 # Dimension Table: STAFF
 
@@ -161,6 +169,7 @@ df_Store = pd.DataFrame(SQL_Store, columns = ['sk_store', 'name','address', 'cit
 print(df_Store)
 
 # Dimension Table: FILM
+
 SQL_FILM = pd.read_sql_query('''
                               SELECT DISTINCT film_id AS sk_film , 
                               rating AS rating_code, 
@@ -175,27 +184,38 @@ SQL_FILM = pd.read_sql_query('''
 df_FILM = pd.DataFrame(SQL_FILM, columns = ['sk_film', 'rating_code','film_duration', 'rental_duration','language','release_year', 'title'])
 print(df_FILM)
 
-
-###############
-#Loading the dataframes into dssa
-#calling the engine and connection 
-engine = create_engine('postgresql+psycopg2://postgres:Tanila2019@localhost:1985/dvdrental')
-c = engine.connect()
-conn = c.connection
+#******************************************************************#
+#**********************loading STAR SCHEMA*************************#
+#******************************************************************#
 
 #load Film data frame 
+
+    
 df_FILM.to_sql('film', engine, schema ='dssa' , if_exists ='replace')
+
 #load store data frame 
+
 df_Store.to_sql('store', engine, schema ='dssa' , if_exists ='replace')
+
 #load date data frame 
+
 df_Date.to_sql('date', engine, schema ='dssa' , if_exists ='replace')
+
 #load customer data frame 
+
 df_customer.to_sql('customer', engine, schema ='dssa' , if_exists ='replace')
+
 #load staff data frame 
+
 df_staff.to_sql('staff', engine, schema ='dssa' , if_exists ='replace')
+
 #load rental data frame 
+
 df_FACT_Rental.to_sql('fact_rental', engine, schema ='dssa' , if_exists ='replace')
 
-
+#Lose the connection
+cursor.close()
 conn.close()
+
+
 
