@@ -1,3 +1,4 @@
 clients/database.ini
 hzahirisrc/config.py
 .vscode/launch.json
+.gitignore/database.ini
