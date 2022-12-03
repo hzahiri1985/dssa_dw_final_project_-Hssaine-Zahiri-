@@ -1,5 +1,5 @@
 # Data Gathering & Warehousing
-## ETL Using Python and Database 
+## ETL Using Python and Database BY Hssaine Zahiri
 ***
 ***
 ### Introduction:
@@ -49,8 +49,39 @@ load the data into the new schema in dabase (Data Warehouse)
 + Load the DataFrame into new schema.
 
 
+# Code
+
+## Using virtualenv to create your virtual environment
+
+pip install virtualenv
+pip install virtualenv
+Create your virtual enviroment
+python -m virtualenv .venv --python=3.10
+Access Virtual Environment MacOS or Linux
+source .venv/bin/activate 
+Access Virtual Environment Windows cmd
+.venv\Scripts\activate
+Deactivate Virtual Environment
+exit
+Clean up or Remove a Virtual Environment
+.venv --rm
+
+![image](https://user-images.githubusercontent.com/49703976/205454061-98f07ed3-cf5f-4203-872e-4321e7eb0308.png)
+
+# Creating tables
+![image](https://user-images.githubusercontent.com/49703976/205454136-66bfe3a8-6ea0-4663-959d-46b5eff5e02e.png)
+
+# Building Star Schema and do the transformation using SQL
+
+![image](https://user-images.githubusercontent.com/49703976/205454214-e302e2cf-3a7f-4901-b727-15d2540fe9e6.png)
+
+# Loading the dataframe into DSSA
+
+![image](https://user-images.githubusercontent.com/49703976/205454246-1a137ab2-e37c-4dbe-b8b7-d1243de4584f.png)
 
 
+# Conclusion 
+Designing and building an ETL system for a data warehouse is an exercise in keeping perspective. This is a typical complex undertaking that demands a comprehensive plan up front. It's easy to start transferring data from a specific source and immediately populate tables that can be queried.
 
 
 
